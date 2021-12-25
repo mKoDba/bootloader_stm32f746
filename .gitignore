@@ -1,0 +1,5 @@
+build/*
+ld/mem.ld
+ld/sections.ld
+.vscode/
+
