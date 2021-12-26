@@ -79,21 +79,20 @@ SECTIONS
         _etext = .;             /* end of .text output section */
     } > FLASH
 
-    /* ARM magic sections */
-	.ARM.extab : ALIGN(4)
-   	{
-       *(.ARM.extab* .gnu.linkonce.armextab.*)
-   	} > FLASH
+    /* ARM magic sections - it is needed when compiled with exceptions enabled (left here for now) */
+    .ARM.extab : ALIGN(4)
+    {
+        *(.ARM.extab* .gnu.linkonce.armextab.*)
+    } > FLASH
    	
     . = ALIGN(4);
-   	__exidx_start = .;   	
-   	.ARM.exidx : ALIGN(4)
-   	{
-       *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-   	} > FLASH
-   	__exidx_end = .;
+    __exidx_start = .;   	
+    .ARM.exidx : ALIGN(4)
+    {
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    } > FLASH
+    __exidx_end = .;
        
-
     .preinit_array ALIGN(4) :
     {
         PROVIDE_HIDDEN(_preinit_array_start = .);

@@ -14,6 +14,11 @@ add_compile_options(
   -funsigned-char
   -ffunction-sections
   -fdata-sections
+# following two flags will disable C++ exceptions
+  -fno-exceptions
+  -fno-unwind-tables
+# disable RTTI
+  -fno-rtti
   -MMD
   -MP
 )

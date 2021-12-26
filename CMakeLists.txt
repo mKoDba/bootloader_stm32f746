@@ -10,6 +10,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# define target name for .elf which will be generated
+set(TARGET_NAME Application)
+
 message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 
 add_compile_options(
@@ -29,21 +32,26 @@ add_compile_definitions(
 )
 
 # need to build "Application" first before setting its properties
-add_executable(Application
+add_executable(${TARGET_NAME}
     src/startup/startup.c
     src/main.cpp
 )
 # <target> PROPERTIES <prop> <value> ...
-set_target_properties(Application PROPERTIES
+set_target_properties(${TARGET_NAME} PROPERTIES
   SUFFIX .elf
 )
 
-target_link_options(Application PRIVATE
+target_link_options(${TARGET_NAME} PRIVATE
   -T${CMAKE_SOURCE_DIR}/ld/stm32f746ngh.ld
   LINKER:--print-memory-usage
-  LINKER:-Map,${CMAKE_CURRENT_BINARY_DIR}/Application.map
+  LINKER:-Map,${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.map
 )
 
-target_include_directories(Application PRIVATE
+target_include_directories(${TARGET_NAME} PRIVATE
   src
 )
+
+#---------------------- POST BUILD -----------------------------#
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} ARGS -O binary "$<TARGET_FILE:${TARGET_NAME}>" ${PROJECT_NAME}.bin
+        COMMENT "Generating .bin file")
